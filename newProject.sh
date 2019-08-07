@@ -6,9 +6,10 @@ if [ ! $1 ]; then
 else
 echo project name: $1
 
+PROJDIR=${1}Project
 # 1. Put each project in its own directory
-mkdir $1
-cd $1
+mkdir $PROJDIR
+cd $PROJDIR
 
 # 2. Put text documents associated with the project in the doc directory
 mkdir doc
@@ -22,6 +23,13 @@ mkdir results
 
 # 5. Put project source code in the src directory
 mkdir src
+cat << EOF > src/sync.sh
+#!/bin/bash
+
+PUB="${1}-pub"
+rsync -r  ../results/figs ../doc/\$PUB
+EOF
+chmod +x src/sync.sh
 
 # 6. A README file that provides an overview of the project as a whole
 cat << EOF | tee README.md
