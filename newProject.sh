@@ -37,7 +37,15 @@ mkdir -p results/tables
 echo "put tables here" > results/tables/README
 
 # Put project source code in the src directory
-mkdir src
+mkdir -p src/controller
+echo "put run scripts, control scripts here" > src/controller/README
+
+mkdir -p src/analysis
+echo "put analysis scripts here" > src/analysis/README
+
+mkdir -p src/program
+echo "put program develop codes here" > src/program/README
+
 cat << EOF > src/sync.sh
 #!/bin/bash
 
