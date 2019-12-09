@@ -71,6 +71,7 @@ cat << 'EOF' > .gitignore
 .root
 .vscode
 *.DS_Store
+.tags
 
 ## Jupyter
 .ipynb_checkpoints
