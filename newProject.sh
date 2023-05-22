@@ -1,57 +1,35 @@
 #!/bin/bash
-# This script to create a well-structured project directory is inspired by this article http://arxiv.org/abs/1609.00037, which can also by found on github: https://swcarpentry.github.io/good-enough-practices-in-scientific-computing/.
+# v2.0: It is updated based on this article: https://towardsdatascience.com/how-to-keep-your-research-projects-organized-part-1-folder-structure-10bd56034d3a
+# v1.0: This script to create a well-structured project directory is inspired by this article http://arxiv.org/abs/1609.00037, which can also by found on github: https://swcarpentry.github.io/good-enough-practices-in-scientific-computing/.
 
 if [ ! $1 ]; then
     echo usage: $0 projectName
 else
 echo project name: $1
 
-PROJDIR=${1}Project
+PROJDIR=${1}
 # Put each project in its own directory
 mkdir $PROJDIR
 cd $PROJDIR
 
-# Put text documents associated with the project in the doc directory
-mkdir -p doc/manuscript
-echo "put manuscripts here" > doc/manuscript/README
+# First step, put raw data and relevant scripts in a data directory
+DIR="0_data"
+mkdir -p $DIR
+echo "Put raw data here, it can be experimental data, simulation data with generating script, simulation input data, etc.." > $DIR/README
 
-mkdir -p doc/lab_notebook
-echo "put laboratory logs here" > doc/lab_notebook/README
+# Put project source code
+DIR="1_code"
+mkdir -p $DIR
+echo "Put codes for computing environment, such as a folder 'respa', which is usually a GitHub repository." > $DIR/README
 
-# Put raw data and metadata in a data directory
-# the data directory might require subdirectories to organize raw data based on time, method of collection, or other metadata most relevant to your analysis.
-mkdir -p data/simulation
-echo "put simulation raw data here" > data/simulation/README
+DIR="2_analysis"
+mkdir -p $DIR
+echo "Put analysis folders containing scripts here, and sort them in order. For example: '0_pre_process', '1_correlation1, etc.." > $DIR/README
 
-mkdir -p data/experiment
-echo "put experiment raw data here" > data/experiment/README
+DIR="3_output"
+mkdir -p $DIR
+echo "This folder contains any final output files that are intended to go into the paper" > $DIR/README
 
-# Put files generated during cleanup and analysis in a results directory
-mkdir -p results/processed_data
-echo "put processed data sets, figures and tables here" > results/processed_data/README
-
-mkdir -p results/figs
-echo "put figures here" > results/figs/README
-
-mkdir -p results/tables
-echo "put tables here" > results/tables/README
-
-# Put project source code in the src directory
-mkdir -p src/controller
-echo "put run scripts, control scripts here" > src/controller/README
-
-mkdir -p src/analysis
-echo "put analysis scripts here" > src/analysis/README
-
-mkdir -p src/program
-echo "put program develop codes here" > src/program/README
-
-cat << EOF > src/sync.sh
-#!/bin/bash
-
-rsync -r  ../results/figs ../doc/manuscript
-EOF
-chmod +x src/sync.sh
 
 # Add cleanBig to get rid of large simulation output
 cat << 'EOF' > cleanBig.sh
@@ -390,26 +368,15 @@ EOF
 cat << 'EOF' | tee README.md
 ```
 |-- README.md
-|-- data
-|   -- experiment/
-|   	[-- raw_data]
-|   -- simulation/
-|   	[-- raw_data]
-|-- doc
-|   -- manuscript/
-|   -- lab_notebook/
-|-- results
-|   -- processed_data/
-|   -- figs/
-|       [-- fig1]
-|       [-- fig2]
-|   -- tables/
-|       [-- paper1]
-|       [-- paper2]
-|-- src
-|   -- controller/runAll.sh
-|   -- analysis/scripts.py
-|   -- program/program.cpp
+|-- 0_data
+|-- 1_code
+|-- 2_analysis
+	|-- 0_pre_process
+		|-- out
+	|-- 1_correlation
+		|-- out
+	...
+|-- 3_output
 ```
 EOF
 
